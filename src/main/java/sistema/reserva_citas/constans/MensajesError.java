@@ -15,4 +15,9 @@ public class MensajesError {
     public static final String MEDICO_INACTIVO = "El médico ya se encuentra inactivo";
     public static final String MEDICO_ACTIVO = "El médico ya se encuentra activo";
 
+    //Recepcionista
+    public static final String RECEPCIONISTA_NO_ENCONTRADO = "El recepcionista solicitado no existe en la base de datos";
+    public static final String RECEPCIONISTA_DNI_DUPLICADO = "El DNI ingresado ya le pertenece a otro recepcionista";
+    public static final String RECEPCIONISTA_INACTIVO = "El recepcionista ya se encuentra eliminado";
+    public static final String RECEPCIONISTA_ACTIVO = "El recepcionista ya se encuentra activo";
 }

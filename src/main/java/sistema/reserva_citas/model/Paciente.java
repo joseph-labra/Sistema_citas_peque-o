@@ -16,15 +16,15 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "dni", length = 8, nullable = false, unique = true)
+    @Column(length = 8, nullable = false, unique = true)
     private String dni;
 
     @Column(name = "nombre_completo", nullable = false, length = 100)
     private String nombreCompleto;
 
-    @Column(name = "telefono", length = 15)
+    @Column(length = 15)
     private String telefono;
 
-    @Column(name = "activo", nullable = false)
+    @Column(nullable = false)
     private Boolean activo;
 }

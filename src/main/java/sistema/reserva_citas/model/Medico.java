@@ -19,19 +19,19 @@ public class Medico {
     @Column(name = "nombre_completo", nullable = false, length = 100)
     private String nombreCompleto;
 
-    @Column(name = "dni", nullable = false, length = 8, unique = true)
+    @Column(nullable = false, length = 8, unique = true)
     private String dni;
 
-    @Column(name = "cmp", nullable = false, unique = true, length = 10)
+    @Column(nullable = false, unique = true, length = 10)
     private String cmp;
 
-    @Column(name = "especialidad", length = 50)
+    @Column(length = 50)
     private String especialidad;
 
-    @Column(name = "telefono", length = 15)
+    @Column(length = 15)
     private String telefono;
 
-    @Column(name = "activo", nullable = false)
+    @Column(nullable = false)
     private Boolean activo;
 
 }
