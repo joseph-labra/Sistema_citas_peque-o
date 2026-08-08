@@ -23,7 +23,7 @@ public class PacienteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PacienteResponse>> getallPacientes(@RequestParam(defaultValue = "activos") String estado){
+    public ResponseEntity<List<PacienteResponse>> getAllPacientes(@RequestParam(defaultValue = "activos") String estado){
         List<PacienteResponse> responses = pacienteService.listarPacientes(estado);
         return ResponseEntity.ok(responses);
     }

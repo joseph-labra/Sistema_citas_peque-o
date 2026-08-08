@@ -10,7 +10,6 @@ import sistema.reserva_citas.model.Paciente;
 import sistema.reserva_citas.repository.PacienteRepository;
 
 import java.util.List;
-import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -25,17 +24,15 @@ public class PacienteService {
     }
 
     public PacienteResponse actualizarPaciente(Long id, PacienteRequest request){
-        Paciente pacienteExistente = pacienteRepository.findById(id)
-                .orElseThrow(()->new RuntimeException(MensajesError.PACIENTE_NO_ENCONTRADO));
-        validarDniparaActualizar(pacienteExistente.getDni(), request.getDni());
+        Paciente pacienteExistente = encontrarPaciente(id);
+        validarDniParaActualizar(pacienteExistente.getDni(), request.getDni());
         PacienteMapper.updateEntity(pacienteExistente, request);
         Paciente pacienteActualizado = pacienteRepository.save(pacienteExistente);
         return PacienteMapper.toResponse(pacienteActualizado);
     }
 
     public PacienteResponse eliminarPaciente(Long id){
-        Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(()->new RuntimeException(MensajesError.PACIENTE_NO_ENCONTRADO));
+        Paciente paciente = encontrarPaciente(id);
         validarPacienteActivo(paciente);
         paciente.setActivo(false);
         pacienteRepository.save(paciente);
@@ -43,8 +40,7 @@ public class PacienteService {
     }
 
     public PacienteResponse restaurarPaciente(Long id){
-        Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(()->new RuntimeException(MensajesError.PACIENTE_NO_ENCONTRADO));
+        Paciente paciente = encontrarPaciente(id);
         validarPacienteInactivo(paciente);
         paciente.setActivo(true);
         pacienteRepository.save(paciente);
@@ -52,8 +48,7 @@ public class PacienteService {
     }
 
     public PacienteResponse mostrarPaciente(Long id){
-        Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(()->new RuntimeException(MensajesError.PACIENTE_NO_ENCONTRADO));
+        Paciente paciente = encontrarPaciente(id);
         return PacienteMapper.toResponse(paciente);
     }
 
@@ -66,30 +61,30 @@ public class PacienteService {
         return PacienteMapper.toResponseList(pacientes);
     }
 
-
-
-
     //Validaciones
+    private Paciente encontrarPaciente(Long id){
+        return pacienteRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException(MensajesError.PACIENTE_NO_ENCONTRADO));
+    }
     private void validarDni(String dni){
         if (pacienteRepository.existsByDni(dni)){
-            throw new RuntimeException(MensajesError.DNI_DUPLICADO);
+            throw new RuntimeException(MensajesError.PACIENTE_DNI_DUPLICADO);
         }
     }
-
-    private void validarDniparaActualizar(String dniActual, String dniNuevo){
+    private void validarDniParaActualizar(String dniActual, String dniNuevo){
         if (!dniActual.equals(dniNuevo) && pacienteRepository.existsByDni(dniNuevo)){
-            throw new RuntimeException(MensajesError.DNI_DUPLICADO);
+            throw new RuntimeException(MensajesError.PACIENTE_DNI_DUPLICADO);
         }
     }
 
     private void validarPacienteActivo(Paciente paciente){
         if (!paciente.getActivo()){
-            throw new RuntimeException(MensajesError.PACIENTE_YA_INACTIVO);
+            throw new RuntimeException(MensajesError.PACIENTE_INACTIVO);
         }
     }
     private void validarPacienteInactivo(Paciente paciente){
         if (paciente.getActivo()){
-            throw new RuntimeException(MensajesError.PACIENTE_YA_ACTIVO);
+            throw new RuntimeException(MensajesError.PACIENTE_ACTIVO);
         }
     }
 }
