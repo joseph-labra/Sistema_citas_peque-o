@@ -79,12 +79,12 @@ public class RecepcionistaService {
     }
     private void validarRecepcionistaActivo(Recepcionista recepcionista){
         if (!recepcionista.getActivo()){
-            throw new RuntimeException(MensajesError.RECEPCIONISTA_INACTIVO);
+            throw new RuntimeException(MensajesError.RECEPCIONISTA_YA_INACTIVO);
         }
     }
     private void validarRecepcionistaInactivo(Recepcionista recepcionista){
         if (recepcionista.getActivo()){
-            throw new RuntimeException(MensajesError.RECEPCIONISTA_ACTIVO);
+            throw new RuntimeException(MensajesError.RECEPCIONISTA_YA_ACTIVO);
         }
     }
 }

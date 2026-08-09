@@ -2,6 +2,7 @@ package sistema.reserva_citas.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sistema.reserva_citas.dto.request.MedicoRequest;
@@ -19,36 +20,31 @@ public class MedicoController {
     @PostMapping
     public ResponseEntity<MedicoResponse> createMedico(@Valid @RequestBody MedicoRequest request){
         MedicoResponse response = medicoService.registrarMedico(request);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<MedicoResponse>> getAllMedicos (@RequestParam (defaultValue = "activos") String estado){
-        List<MedicoResponse> responses = medicoService.listarMedicos(estado);
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(medicoService.listarMedicos(estado));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MedicoResponse> getMedicoById (@PathVariable Long id){
-        MedicoResponse response = medicoService.mostrarMedico(id);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(medicoService.mostrarMedico(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MedicoResponse> updateMedico(@PathVariable Long id, @Valid @RequestBody MedicoRequest request){
-        MedicoResponse response = medicoService.actualizarMedico(id, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(medicoService.actualizarMedico(id, request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MedicoResponse> deleteMedico(@PathVariable Long id){
-        MedicoResponse response = medicoService.eliminarMedico(id);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(medicoService.eliminarMedico(id));
     }
 
     @PatchMapping("/{id}/restaurar")
     public ResponseEntity<MedicoResponse> restoreMedico(@PathVariable Long id){
-        MedicoResponse response = medicoService.restaurarMedico(id);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(medicoService.restaurarMedico(id));
     }
 }

@@ -10,14 +10,13 @@ import java.util.List;
 
 public class MedicoMapper {
     public static Medico toEntity(MedicoRequest request){
-        Medico medico = new Medico();
-        medico.setDni(request.getDni());
-        medico.setNombreCompleto(request.getNombreCompleto());
-        medico.setCmp(request.getCmp());
-        medico.setEspecialidad(request.getEspecialidad());
-        medico.setTelefono(request.getTelefono());
-        medico.setActivo(true);
-        return medico;
+        return Medico.builder()
+                .dni(request.getDni())
+                .nombreCompleto(request.getNombreCompleto())
+                .cmp(request.getCmp())
+                .especialidad(request.getEspecialidad())
+                .telefono(request.getTelefono())
+                .activo(true).build();
     }
 
     public static void updateEntity(Medico medicoExistente, MedicoRequest request){

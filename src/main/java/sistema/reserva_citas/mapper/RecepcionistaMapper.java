@@ -8,13 +8,12 @@ import java.util.List;
 
 public class RecepcionistaMapper {
     public static Recepcionista toEntity(RecepcionistaRequest request){
-        Recepcionista recepcionista = new Recepcionista();
-        recepcionista.setDni(request.getDni());
-        recepcionista.setNombreCompleto(request.getNombreCompleto());
-        recepcionista.setTelefono(request.getTelefono());
-        recepcionista.setTurno(request.getTurno());
-        recepcionista.setActivo(true);
-        return recepcionista;
+        return Recepcionista.builder()
+                .dni(request.getDni())
+                .nombreCompleto(request.getNombreCompleto())
+                .telefono(request.getTelefono())
+                .turno(request.getTurno())
+                .activo(true).build();
     }
     public static void updateEntity(Recepcionista recepcionistaExistente, RecepcionistaRequest request){
         recepcionistaExistente.setDni(request.getDni());

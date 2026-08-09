@@ -89,12 +89,12 @@ public class MedicoService {
     }
     private void validarMedicoActivo(Medico medico){
         if (!medico.getActivo()){
-            throw new RuntimeException(MensajesError.MEDICO_INACTIVO);
+            throw new RuntimeException(MensajesError.MEDICO_YA_INACTIVO);
         }
     }
     private void validarMedicoInactivo(Medico medico){
         if (medico.getActivo()){
-            throw new RuntimeException(MensajesError.MEDICO_ACTIVO);
+            throw new RuntimeException(MensajesError.MEDICO_YA_ACTIVO);
         }
     }
 }

@@ -79,12 +79,12 @@ public class PacienteService {
 
     private void validarPacienteActivo(Paciente paciente){
         if (!paciente.getActivo()){
-            throw new RuntimeException(MensajesError.PACIENTE_INACTIVO);
+            throw new RuntimeException(MensajesError.PACIENTE_YA_INACTIVO);
         }
     }
     private void validarPacienteInactivo(Paciente paciente){
         if (paciente.getActivo()){
-            throw new RuntimeException(MensajesError.PACIENTE_ACTIVO);
+            throw new RuntimeException(MensajesError.PACIENTE_YA_ACTIVO);
         }
     }
 }

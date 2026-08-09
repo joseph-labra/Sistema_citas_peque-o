@@ -8,12 +8,11 @@ import java.util.List;
 
 public class PacienteMapper {
     public static Paciente toEntity(PacienteRequest request){
-        Paciente paciente = new Paciente();
-        paciente.setDni(request.getDni());
-        paciente.setNombreCompleto(request.getNombreCompleto());
-        paciente.setTelefono(request.getTelefono());
-        paciente.setActivo(true);
-        return paciente;
+        return Paciente.builder()
+                .dni(request.getDni())
+                .nombreCompleto(request.getNombreCompleto())
+                .telefono(request.getTelefono())
+                .activo(true).build();
     }
     public static void updateEntity(Paciente pacienteExistente, PacienteRequest request){
         pacienteExistente.setDni(request.getDni());
