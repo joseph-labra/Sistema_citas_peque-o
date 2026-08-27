@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import sistema.reserva_citas.constans.MensajesError;
 import sistema.reserva_citas.dto.request.PacienteRequest;
 import sistema.reserva_citas.dto.response.PacienteResponse;
+import sistema.reserva_citas.exception.BusinessRuleException;
+import sistema.reserva_citas.exception.DuplicateResourceException;
+import sistema.reserva_citas.exception.ResourceNotFoundException;
 import sistema.reserva_citas.mapper.PacienteMapper;
 import sistema.reserva_citas.model.Paciente;
 import sistema.reserva_citas.repository.PacienteRepository;
@@ -64,27 +67,27 @@ public class PacienteService {
     //Validaciones
     private Paciente encontrarPaciente(Long id){
         return pacienteRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException(MensajesError.PACIENTE_NO_ENCONTRADO));
+                .orElseThrow(()-> new ResourceNotFoundException(MensajesError.PACIENTE_NO_ENCONTRADO));
     }
     private void validarDni(String dni){
         if (pacienteRepository.existsByDni(dni)){
-            throw new RuntimeException(MensajesError.PACIENTE_DNI_DUPLICADO);
+            throw new DuplicateResourceException(MensajesError.PACIENTE_DNI_DUPLICADO);
         }
     }
     private void validarDniParaActualizar(String dniActual, String dniNuevo){
         if (!dniActual.equals(dniNuevo) && pacienteRepository.existsByDni(dniNuevo)){
-            throw new RuntimeException(MensajesError.PACIENTE_DNI_DUPLICADO);
+            throw new DuplicateResourceException(MensajesError.PACIENTE_DNI_DUPLICADO);
         }
     }
 
     private void validarPacienteActivo(Paciente paciente){
         if (!paciente.getActivo()){
-            throw new RuntimeException(MensajesError.PACIENTE_YA_INACTIVO);
+            throw new BusinessRuleException(MensajesError.PACIENTE_YA_INACTIVO);
         }
     }
     private void validarPacienteInactivo(Paciente paciente){
         if (paciente.getActivo()){
-            throw new RuntimeException(MensajesError.PACIENTE_YA_ACTIVO);
+            throw new BusinessRuleException(MensajesError.PACIENTE_YA_ACTIVO);
         }
     }
 }

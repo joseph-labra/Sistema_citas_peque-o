@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import sistema.reserva_citas.constans.MensajesError;
 import sistema.reserva_citas.dto.request.CitaRequest;
 import sistema.reserva_citas.dto.response.CitaResponse;
+import sistema.reserva_citas.exception.BusinessRuleException;
+import sistema.reserva_citas.exception.ResourceNotFoundException;
 import sistema.reserva_citas.mapper.CitaMapper;
 import sistema.reserva_citas.model.Cita;
 import sistema.reserva_citas.model.Medico;
@@ -99,48 +101,48 @@ public class CitaService {
     //Validaciones
     private Paciente encontrarPaciente(Long pacienteId){
         Paciente paciente =pacienteRepository.findById(pacienteId)
-                .orElseThrow(()-> new RuntimeException(MensajesError.PACIENTE_NO_ENCONTRADO));
+                .orElseThrow(()-> new ResourceNotFoundException(MensajesError.PACIENTE_NO_ENCONTRADO));
         if (!paciente.getActivo()){
-            throw new RuntimeException(MensajesError.PACIENTE_INACTIVO);
+            throw new BusinessRuleException(MensajesError.PACIENTE_INACTIVO);
         }
         return paciente;
     }
     private Medico encontrarMedico(Long medicoId){
         Medico medico = medicoRepository.findById(medicoId)
-                .orElseThrow(()-> new RuntimeException(MensajesError.MEDICO_NO_ENCONTRADO));
+                .orElseThrow(()-> new ResourceNotFoundException(MensajesError.MEDICO_NO_ENCONTRADO));
         if (!medico.getActivo()){
-            throw new RuntimeException(MensajesError.MEDICO_INACTIVO);
+            throw new BusinessRuleException(MensajesError.MEDICO_INACTIVO);
         }
         return medico;
     }
     private Recepcionista encontrarRecepcionista(Long recepcionistaId){
         Recepcionista recepcionista = recepcionistaRepository.findById(recepcionistaId)
-                .orElseThrow(()-> new RuntimeException(MensajesError.RECEPCIONISTA_NO_ENCONTRADO));
+                .orElseThrow(()-> new ResourceNotFoundException(MensajesError.RECEPCIONISTA_NO_ENCONTRADO));
         if (!recepcionista.getActivo()){
-            throw new RuntimeException(MensajesError.RECEPCIONISTA_INACTIVO);
+            throw new BusinessRuleException(MensajesError.RECEPCIONISTA_INACTIVO);
         }
         return recepcionista;
     }
     private Cita encontrarCita(long id){
         return citaRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException(MensajesError.CITA_NO_ENCONTRADA));
+                .orElseThrow(()-> new ResourceNotFoundException(MensajesError.CITA_NO_ENCONTRADA));
     }
     private void validarHorarioCita(LocalDateTime fechaHora){
         int minuto = fechaHora.getMinute();
         if (minuto != 0 && minuto != 30){
-            throw new RuntimeException(MensajesError.CITA_HORARIO_INVALIDO);
+            throw new BusinessRuleException(MensajesError.CITA_HORARIO_INVALIDO);
         }
     }
     private void validarCitaEditable(Cita cita){
         if (cita.getEstado() == EstadoCita.CANCELADA || cita.getEstado() == EstadoCita.COMPLETADA){
-            throw new RuntimeException(MensajesError.CITA_NO_EDITABLE);
+            throw new BusinessRuleException(MensajesError.CITA_NO_EDITABLE);
         }
     }
     private void validarCruceHorarios(Long medicoId, LocalDateTime fechaHora, Long citaActual){
         Optional<Cita> citaOcupada = citaRepository.findByMedicoIdAndFechaHoraAndEstadoNot(medicoId,fechaHora,EstadoCita.CANCELADA);
         if (citaOcupada.isPresent()){
             if (citaActual == null || !citaOcupada.get().getId().equals(citaActual)){
-                throw new RuntimeException(MensajesError.CITA_CRUCE_HORARIOS);
+                throw new BusinessRuleException(MensajesError.CITA_CRUCE_HORARIOS);
             }
         }
     }

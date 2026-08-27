@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import sistema.reserva_citas.constans.MensajesError;
 import sistema.reserva_citas.dto.request.MedicoRequest;
 import sistema.reserva_citas.dto.response.MedicoResponse;
+import sistema.reserva_citas.exception.BusinessRuleException;
+import sistema.reserva_citas.exception.DuplicateResourceException;
+import sistema.reserva_citas.exception.ResourceNotFoundException;
 import sistema.reserva_citas.mapper.MedicoMapper;
 import sistema.reserva_citas.model.Medico;
 import sistema.reserva_citas.repository.MedicoRepository;
@@ -27,6 +30,7 @@ public class MedicoService {
     public MedicoResponse actualizarMedico(Long id, MedicoRequest request){
         Medico medicoExistente = encontrarMedico(id);
         validarDniParaActualizar(medicoExistente.getDni(), request.getDni());
+        validarCmpParaActualizar(medicoExistente.getCmp(), request.getCmp());
         MedicoMapper.updateEntity(medicoExistente, request);
         Medico medicoActualizado = medicoRepository.save(medicoExistente);
         return MedicoMapper.toResponse(medicoActualizado);
@@ -65,36 +69,36 @@ public class MedicoService {
     //Validaciones
     private Medico encontrarMedico(Long id){
         return medicoRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException(MensajesError.MEDICO_NO_ENCONTRADO));
+                .orElseThrow(()-> new ResourceNotFoundException(MensajesError.MEDICO_NO_ENCONTRADO));
     }
     private void validarDni(String dni){
         if (medicoRepository.existsByDni(dni)){
-            throw new RuntimeException(MensajesError.MEDICO_DNI_DUPLICADO);
+            throw new DuplicateResourceException(MensajesError.MEDICO_DNI_DUPLICADO);
         }
     }
     private void validarCmp(String cmp){
         if (medicoRepository.existsByCmp(cmp)){
-            throw new RuntimeException(MensajesError.MEDICO_CMP_DUPLICADO);
+            throw new DuplicateResourceException(MensajesError.MEDICO_CMP_DUPLICADO);
         }
     }
     private void validarDniParaActualizar(String dniActual, String dniNuevo){
         if (!dniActual.equals(dniNuevo) && medicoRepository.existsByDni(dniNuevo)){
-            throw new RuntimeException(MensajesError.MEDICO_DNI_DUPLICADO);
+            throw new DuplicateResourceException(MensajesError.MEDICO_DNI_DUPLICADO);
         }
     }
     private void validarCmpParaActualizar(String cmpActual, String cmpNuevo){
-        if (!cmpActual.equals(cmpNuevo) && medicoRepository.existsByDni(cmpNuevo)){
-            throw new RuntimeException(MensajesError.MEDICO_CMP_DUPLICADO);
+        if (!cmpActual.equals(cmpNuevo) && medicoRepository.existsByCmp(cmpNuevo)){
+            throw new DuplicateResourceException(MensajesError.MEDICO_CMP_DUPLICADO);
         }
     }
     private void validarMedicoActivo(Medico medico){
         if (!medico.getActivo()){
-            throw new RuntimeException(MensajesError.MEDICO_YA_INACTIVO);
+            throw new BusinessRuleException(MensajesError.MEDICO_YA_INACTIVO);
         }
     }
     private void validarMedicoInactivo(Medico medico){
         if (medico.getActivo()){
-            throw new RuntimeException(MensajesError.MEDICO_YA_ACTIVO);
+            throw new BusinessRuleException(MensajesError.MEDICO_YA_ACTIVO);
         }
     }
 }
