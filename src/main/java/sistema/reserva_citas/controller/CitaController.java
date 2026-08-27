@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sistema.reserva_citas.dto.request.CitaRequest;
 import sistema.reserva_citas.dto.response.CitaResponse;
-import sistema.reserva_citas.dto.response.RecepcionistaResponse;
-import sistema.reserva_citas.model.Cita;
 import sistema.reserva_citas.model.enums.EstadoCita;
 import sistema.reserva_citas.service.CitaService;
 

@@ -90,7 +90,7 @@ public class CitaService {
     }
     public List<CitaResponse> listarCitasPorRecepcionistas(Long recepcionistaId){
         encontrarRecepcionista(recepcionistaId);
-        List<Cita> citas = citaRepository.findByRecepcionista(recepcionistaId);
+        List<Cita> citas = citaRepository.findByRecepcionistaId(recepcionistaId);
         return CitaMapper.toResponseList(citas);
     }
     public List<CitaResponse> listarCitasPorEstado(EstadoCita estado){

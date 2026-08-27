@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findByPacienteId(Long id);
     List<Cita> findByMedicoId(Long id);
-    List<Cita> findByRecepcionista(Long id);
+    List<Cita> findByRecepcionistaId(Long id);
     List<Cita> findByEstado(EstadoCita estado);
     Optional<Cita> findByMedicoIdAndFechaHoraAndEstadoNot(Long medicoId, LocalDateTime fechaHora, EstadoCita estado);
 }
